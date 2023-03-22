@@ -60,8 +60,6 @@ async function copyToClipboard(text) {
 
 // Function to handle button click
 function getMarkdownFromChat() {
-    const title = document.querySelector('title').innerText;
-
     var messageBoxes = document.querySelectorAll('.flex.flex-grow.flex-col.gap-3');
 
     let finalText = "";
@@ -108,6 +106,7 @@ function saveChat() {
     a.href = downloadUrl;
 
     // Set the download attribute of the <a> tag to the desired file name
+    const title = document.querySelector('title').innerText;
     a.download = `${title}.md`;
 
     // Simulate a click on the <a> tag to initiate the download
