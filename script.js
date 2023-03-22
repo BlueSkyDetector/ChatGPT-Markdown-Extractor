@@ -15,6 +15,19 @@ document.body.appendChild(buttonDiv);
 // Add event listener for button click
 document.getElementById("chatGPT-save-button").addEventListener("click", saveChat);
 
+var copyButton = document.createElement("button");
+copyButton.innerHTML = "Copy Chat";
+copyButton.setAttribute("id", "chatGPT-copy-button");
+
+// Set to a div to hold the copyButton
+buttonDiv.appendChild(copyButton);
+
+// Add the button to the top right corner of the screen
+document.body.appendChild(buttonDiv);
+
+// Add event listener for button click
+document.getElementById("chatGPT-copy-button").addEventListener("click", copyChat);
+
 function unwrapElements(element, tagName) {
   const elements = element.querySelectorAll(tagName);
   elements.forEach(el => {
@@ -36,11 +49,17 @@ function htmlToMarkdownCodeBlock(element) {
   });
 }
 
+async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    console.log('text copied');
+  } catch (err) {
+    console.error('failed to copy the text', err);
+  }
+}
 
 // Function to handle button click
-function saveChat() {
-    console.log("Chat saved!");
-    // Add code here to save the chat
+function getMarkdownFromChat() {
     const title = document.querySelector('title').innerText;
 
     var messageBoxes = document.querySelectorAll('.flex.flex-grow.flex-col.gap-3');
@@ -66,8 +85,20 @@ function saveChat() {
             currentSpeaker = "You";
         }
     });
+    return finalText;
+}
 
+function copyChat() {
+    console.log("Chat copied!");
+    // Add code here to save the chat
+    let finalText = getMarkdownFromChat()
+    copyToClipboard(finalText);
+}
 
+function saveChat() {
+    console.log("Chat saved!");
+    // Add code here to save the chat
+    let finalText = getMarkdownFromChat()
     let downloadUrl = URL.createObjectURL(new Blob([finalText], { type: 'application/octet-binary' }));
     
     // Create an <a> tag
